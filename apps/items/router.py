@@ -6,7 +6,6 @@ router = APIRouter()
 
 @router.post("")
 async def create_item(item: Item):
-    item.name + item.price
     return item
 
 

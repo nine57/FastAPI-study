@@ -1,9 +1,16 @@
 import uvicorn
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
+from sqlalchemy.orm import Session
 
-from apps.collectors import router as collectors
-from apps.items import router as items
-from apps.universities import router as universities
+from apps.collectors.router import router as collectors
+from apps.items.router import router as items
+from apps.items.schemas import Item
+from apps.items.selectors import create_item
+from apps.universities.router import router as universities
+from settings.database import SessionLocal
+
+# main
+
 
 app = FastAPI(
     title="FastAPI for New Server",
@@ -13,6 +20,9 @@ app = FastAPI(
 
 if __name__ == "__main__":
     uvicorn.run(app="main:app")
+
+
+# router
 
 
 @app.get("/")
@@ -25,8 +35,23 @@ async def api_root():
     return {"message": "api root"}
 
 
-app.include_router(collectors.router, prefix="/api/collector", tags=["collectors"])
-app.include_router(items.router, prefix="/api/items", tags=["items"])
-app.include_router(
-    universities.router, prefix="/api/universities", tags=["universities"]
-)
+app.include_router(collectors, prefix="/api/collector", tags=["collectors"])
+app.include_router(items, prefix="/api/items", tags=["items"])
+app.include_router(universities, prefix="/api/universities", tags=["universities"])
+
+
+# database
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+@app.post("/items", response_model=Item)
+def create_items(item: Item, db: Session = Depends(get_db)):
+    db_item = create_item(db=db, item=item)
+    return db_item

@@ -8,4 +8,4 @@ class Item(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     price = Column(Float)
-    is_offer = Column(Boolean, default=False)
+    is_offered = Column(Boolean, default=False)
