@@ -1,12 +1,20 @@
-from typing import Union
+from typing import Optional
 
 from pydantic import BaseModel
 
 
-class Item(BaseModel):
-    name: str
-    price: Union[float, None] = None
-    is_offer: bool = False
+class ItemBase(BaseModel):
+    title: str
+    description: Optional[str] = None
+
+
+class ItemCreate(ItemBase):
+    pass
+
+
+class Item(ItemBase):
+    id: int
+    owner_id: int
 
     class Config:
         orm_mode = True
