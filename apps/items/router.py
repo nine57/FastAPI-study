@@ -3,14 +3,16 @@ from typing import List
 from apps.items.schemas import Item, ItemCreate
 from apps.items.selectors import get_items
 from apps.items.services import create_user_item
-from fastapi import APIRouter
+from database import get_db
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 
-router = APIRouter()
+router = APIRouter(tags=["items"])
 
 
 @router.post("")
-async def create_item(item: ItemCreate):
-    item = create_user_item()
+async def create_item(item: ItemCreate, db: Session = Depends(get_db)):
+    item = create_user_item(item=item, user_id=1, db=db)
     return item
 
 

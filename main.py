@@ -1,12 +1,15 @@
+import nest_asyncio
 import uvicorn
 from fastapi import FastAPI
 
 from apps.items.router import router as item_router
+from apps.schools.router import router as schools_router
 from apps.users.router import router as users_router
 from database import Base, engine
 
 Base.metadata.create_all(bind=engine)
 
+nest_asyncio.apply()
 
 app = FastAPI(
     title="FastAPI for New Server",
@@ -26,3 +29,4 @@ async def check_server():
 
 app.include_router(item_router, prefix="/api/items")
 app.include_router(users_router, prefix="/api/users")
+app.include_router(schools_router, prefix="/api/schools")
