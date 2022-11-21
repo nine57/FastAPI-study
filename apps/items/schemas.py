@@ -9,7 +9,7 @@ class ItemBase(BaseModel):
 
 
 class ItemCreate(ItemBase):
-    pass
+    owner_id: int
 
 
 class Item(ItemBase):

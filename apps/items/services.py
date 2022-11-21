@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 from . import models, schemas
 
 
-def create_user_item(item: schemas.ItemCreate, user_id: int, db: Session):
-    db_item = models.Item(**item.dict(), owner_id=user_id)
+def create_item(item: schemas.ItemCreate, db: Session):
+    db_item = models.Item(**item.dict())
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
