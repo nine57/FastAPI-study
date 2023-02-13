@@ -12,31 +12,30 @@ router = APIRouter(tags=["users"])
 
 @router.get("")
 async def user_list(db: Session = Depends(get_db)):
-    users = get_user_list(db=db)
+    users = await get_user_list(db=db)
     return users
 
 
 @router.get("/me")
 async def user_retrieve_for_me(
-    db: Session = Depends(get_db),
-    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db), user: User = Depends(get_current_user)
 ):
-    db_user = get_user_by_id(db=db, user_id=user.id)
-    data = user_serializer(user=db_user)
+    db_user = await get_user_by_id(db=db, user_id=user.id)
+    data = await user_serializer(user=db_user)
     return {"status": "success", "data": data}
 
 
 @router.get("/{user_id}")
 async def user_retrieve(user_id: int, db: Session = Depends(get_db)):
-    db_user = get_user_by_id(db=db, user_id=user_id)
-    data = user_serializer(user=db_user)
+    db_user = await get_user_by_id(db=db, user_id=user_id)
+    data = await user_serializer(user=db_user)
     return {"status": "success", "data": data}
 
 
 @router.post("")
 async def user_create(user: UserCreate, db: Session = Depends(get_db)):
     db_user = create_user(db=db, user=user)
-    data = user_serializer(user=db_user)
+    data = await user_serializer(user=db_user)
     return {"status": "created", "data": data}
 
 

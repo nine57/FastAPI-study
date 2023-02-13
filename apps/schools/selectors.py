@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from . import models
 
 
-def get_school_data(db: Session):
+async def get_school_data(db: Session):
     return db.query(models.SchoolCode).all()
 
 
@@ -43,7 +43,7 @@ async def request_to_target(idx, school):
 
 
 async def get_data(db):
-    schools = get_school_data(db=db)
+    schools = await get_school_data(db=db)
     start = time.time()
     cycle = len(schools) // 100
     for i in range(cycle):
@@ -52,7 +52,7 @@ async def get_data(db):
             asyncio.gather(
                 *(
                     request_to_target(idx=100 * i + idx, school=school)
-                    for idx, school in enumerate(schools[100 * i: 100 * (i + 1)])
+                    for idx, school in enumerate(schools[100 * i : 100 * (i + 1)])
                 )
             )
         )

@@ -12,7 +12,7 @@ router = APIRouter(tags=["items"])
 
 @router.post("")
 async def item_create(item: ItemCreate, db: Session = Depends(get_db)):
-    item = create_item(item=item, db=db)
+    item = await create_item(item=item, db=db)
     return item
 
 
@@ -23,5 +23,5 @@ async def item_retrieve(item_id: int, query: str = None, boolean: bool = True):
 
 @router.get("", response_model=List[Item])
 async def item_list(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    items = get_item_list(db=db, skip=skip, limit=limit)
+    items = await get_item_list(db=db, skip=skip, limit=limit)
     return items

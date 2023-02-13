@@ -34,7 +34,7 @@ app = root_router(app)
 # router
 @app.get(path="/", description="Server Health Check")
 async def check_server():
-    # send_slack_message(text="데일_서버_헬스체크", channel="C6491MDPG")
+    # await send_slack_message(text="데일_서버_헬스체크", channel="C6491MDPG")
     return {"status": 200, "message": "server check OK"}
 
 
